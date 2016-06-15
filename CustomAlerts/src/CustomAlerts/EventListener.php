@@ -54,7 +54,6 @@ class EventListener implements Listener {
     			$this->plugin->getServer()->getPluginManager()->callEvent(new CustomAlertsOutdatedClientKickEvent($player));
     			//Check if Outdated Client message is not empty
     			if(CustomAlerts::getAPI()->getOutdatedClientMessage() != null){
-    				$player->close("", CustomAlerts::getAPI()->getOutdatedClientMessage());
     				$event->setCancelled(false);
     			}
     		}elseif($packet->protocol1 > Info::CURRENT_PROTOCOL){
@@ -66,7 +65,6 @@ class EventListener implements Listener {
     			$this->plugin->getServer()->getPluginManager()->callEvent(new CustomAlertsOutdatedServerKickEvent($player));
     			//Check if Outdated Server message is not empty
     			if(CustomAlerts::getAPI()->getOutdatedServerMessage() != null){
-    				$player->close("", CustomAlerts::getAPI()->getOutdatedServerMessage());
     				$event->setCancelled(false);
     			}
     		}
@@ -187,50 +185,6 @@ class EventListener implements Listener {
     	 $event->setQuitMessage(CustomAlerts::getAPI()->getQuitMessage());
     }
     
-    public function onWorldChange(EntityLevelChangeEvent $event){
-    	$entity = $event->getEntity();
-    	CustomAlerts::getAPI()->setWorldChangeMessage("");
-    	//Check if the Entity is a Player
-    	if($entity instanceof Player){
-    		$player = $entity;
-    		$origin = $event->getOrigin();
-    		$target = $event->getTarget();
-    		//Check if Default WorldChange Message is enabled
-    		if(CustomAlerts::getAPI()->isDefaultWorldChangeMessageEnabled()){
-    			CustomAlerts::getAPI()->setWorldChangeMessage(CustomAlerts::getAPI()->getDefaultWorldChangeMessage($player, $origin, $target));
-    		}
-    	    //WorldChange Event
-    	    $this->plugin->getServer()->getPluginManager()->callEvent(new CustomAlertsWorldChangeEvent($player, $origin, $target));
-    		if(CustomAlerts::getAPI()->getWorldChangeMessage() != ""){
-    			Server::getInstance()->broadcastMessage(CustomAlerts::getAPI()->getWorldChangeMessage());
-    		}
-    	}
-    }
-    
-    
-    /**
-     * @param PlayerDeathEvent $event
-     *
-     * @priority HIGHEST
-     */
-    public function onPlayerDeath(PlayerDeathEvent $event){
-    	$player = $event->getEntity();
-    	CustomAlerts::getAPI()->setDeathMessage($event->getDeathMessage());
-    	if($player instanceof Player){
-    		$cause = $player->getLastDamageCause();
-    		if(CustomAlerts::getAPI()->isDeathHidden($cause)){
-    			CustomAlerts::getAPI()->setDeathMessage("");
-    		}else{
-    			//Check if Death message is custom
-    			if(CustomAlerts::getAPI()->isDeathCustom($cause)){
-    				CustomAlerts::getAPI()->setDeathMessage(CustomAlerts::getAPI()->getDefaultDeathMessage($player, $cause));
-    			}
-    		}
-            //Death Event
-    	    $this->plugin->getServer()->getPluginManager()->callEvent(new CustomAlertsDeathEvent($player, $cause));
-    		$event->setDeathMessage(CustomAlerts::getAPI()->getDeathMessage());
-    	}
-    }
 	
 }
 ?>
