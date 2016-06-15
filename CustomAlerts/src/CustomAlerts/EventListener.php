@@ -55,7 +55,7 @@ class EventListener implements Listener {
     			//Check if Outdated Client message is not empty
     			if(CustomAlerts::getAPI()->getOutdatedClientMessage() != null){
     				$player->close("", CustomAlerts::getAPI()->getOutdatedClientMessage());
-    				$event->setCancelled(true);
+    				$event->setCancelled(false);
     			}
     		}elseif($packet->protocol1 > Info::CURRENT_PROTOCOL){
     			//Check if outdated server message is custom
@@ -67,7 +67,7 @@ class EventListener implements Listener {
     			//Check if Outdated Server message is not empty
     			if(CustomAlerts::getAPI()->getOutdatedServerMessage() != null){
     				$player->close("", CustomAlerts::getAPI()->getOutdatedServerMessage());
-    				$event->setCancelled(true);
+    				$event->setCancelled(false);
     			}
     		}
     	}
